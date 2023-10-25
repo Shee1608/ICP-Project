@@ -1,19 +1,26 @@
-import { TASK_M_backend } from "../../declarations/TASK_M_backend";
+const todoInput = document.getElementById("todoInput");
+const todoList = document.getElementById("todoList");
 
-document.querySelector("form").addEventListener("submit", async (e) => {
-  e.preventDefault();
-  const button = e.target.querySelector("button");
+const addButton = document.getElementById("addButton");
+const clearButton = document.getElementById("clearButton");
 
-  const name = document.getElementById("name").value.toString();
+addButton.addEventListener("click", addTodo);
+clearButton.addEventListener("click", clearCompleted);
+function addTodo() {
+    const description = todoInput.value.trim();
+    if (description === "") return;
 
-  button.setAttribute("disabled", true);
+    const listItem = document.createElement("li");
+    listItem.textContent = description;
+    todoList.appendChild(listItem);
+    todoInput.value = "";
+}
 
-  // Interact with foo actor, calling the greet method
-  const greeting = await TASK_M_backend.greet(name);
-
-  button.removeAttribute("disabled");
-
-  document.getElementById("greeting").innerText = greeting;
-
-  return false;
-});
+function clearCompleted() {
+    const completedItems = Array.from(todoList.getElementsByTagName("li"));
+    completedItems.forEach(item => {
+        if (item) {
+            item.remove();
+        }
+    });
+}
